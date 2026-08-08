@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<title>একতা যুব ফাউন্ডেশন</title>
+<style>
+  :root{
+    --bg:#EEF3EE; --paper:#FBFBF8; --primary:#0F4C43; --primaryDark:#0B3A33;
+    --primaryLight:#E4EEEA; --gold:#A9762F; --goldLight:#F4E9D4; --red:#B4392B;
+    --redLight:#FBEAE8; --green:#2F7A5C; --greenLight:#E5F3EC; --ink:#173832;
+    --muted:#6B7C77; --border:#DCE5DE;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; background:var(--bg); color:var(--ink);
+    font-family:'Noto Sans Bengali','Hind Siliguri',system-ui,-apple-system,sans-serif;
+    -webkit-tap-highlight-color:transparent; font-size:16px; }
+  #wrap{ max-width:480px; margin:0 auto; min-height:100vh; display:flex; flex-direction:column; }
+  header{ background:var(--primary); padding:20px 16px 16px; position:sticky; top:0; z-index:20;
+    box-shadow:0 1px 3px rgba(0,0,0,.15); }
+  header .row{ display:flex; align-items:center; gap:10px; }
+  header .logo{ width:42px; height:42px; border-radius:10px; background:var(--goldLight);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--primaryDark); }
+  header .title{ color:#fff; font-weight:700; font-size:18px; line-height:1.2; }
+  header .subtitle{ color:#BFE2D6; font-size:13.5px; }
+  header .settingsBtn{ margin-left:auto; width:36px; height:36px; border-radius:8px;
+    background:rgba(255,255,255,.14); border:none; color:#fff; font-size:18px; cursor:pointer; }
+  main{ flex:1; padding:14px 16px 96px; }
+  nav{ position:fixed; bottom:0; left:0; right:0; background:var(--paper); border-top:1px solid var(--border);
+    max-width:480px; margin:0 auto; z-index:20; }
+  nav .grid{ display:grid; grid-template-columns:repeat(4,1fr); }
+  nav button{ background:none; border:none; padding:10px 4px; display:flex; flex-direction:column;
+    align-items:center; gap:4px; cursor:pointer; color:var(--muted); font-family:inherit; }
+  nav button.active{ color:var(--primary); font-weight:700; }
+  nav button .ic{ font-size:20px; }
+  nav button .lb{ font-size:12px; }
+
+  /* Avatar Style */
+  .avatar {
+    width: 46px; height: 46px; border-radius: 50%; object-fit: cover;
+    background: var(--primaryLight); color: var(--primary); display: flex;
+    align-items: center; justify-content: center; font-weight: 700; font-size: 17px;
+    flex-shrink: 0; border: 1px solid var(--border);
+  }
+  .avatar-lg { width: 64px; height: 64px; font-size: 26px; }
+
+  .card{ background:var(--paper); border:1px solid var(--border); border-radius:16px; padding:16px; }
+  .card + .card{ margin-top:12px; }
+  .stack > * + *{ margin-top:12px; }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .grid3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+  .statcard{ display:flex; align-items:center; gap:10px; text-align:left; width:100%;
+    background:var(--paper); border:1px solid var(--border); border-radius:16px; padding:14px; cursor:pointer;
+    font-family:inherit; }
+  .statcard .ic{ width:42px; height:42px; border-radius:10px; display:flex; align-items:center;
+    justify-content:center; font-size:20px; flex-shrink:0; }
+  .statcard .lbl{ font-size:12.5px; color:var(--muted); }
+  .statcard .val{ font-size:17px; font-weight:700; color:var(--ink); }
+  .tone-green .ic{ background:var(--greenLight); }
+  .tone-red .ic{ background:var(--redLight); }
+  .tone-gold .ic{ background:var(--goldLight); }
+  .tone-primary .ic{ background:var(--primaryLight); }
+
+  .btn{ border:none; border-radius:10px; padding:12px 16px; font-weight:700; font-size:14.5px; cursor:pointer;
+    font-family:inherit; color:#fff; }
+  .btn-primary{ background:var(--primary); }
+  .btn-gold{ background:var(--gold); }
+  .btn-red{ background:var(--red); }
+  .btn-outline{ background:var(--paper); color:var(--ink); border:1px solid var(--border); }
+  .btn-block{ width:100%; display:flex; align-items:center; justify-content:center; gap:6px; }
+  .btn-sm{ padding:8px 12px; font-size:13px; border-radius:8px; }
+  .btn:disabled{ opacity:.5; }
+
+  input[type=text], input[type=number], input[type=tel], input[type=file], select, textarea{
+    width:100%; border:1px solid var(--border); background:#fff; color:var(--ink); border-radius:10px;
+    padding:11px 13px; font-size:15px; font-family:inherit; outline:none; }
+  textarea{ resize:none; }
+  .field{ margin-bottom:12px; }
+  .field label{ display:block; font-size:13px; color:var(--muted); margin-bottom:5px; }
+  .icon-btn{ background:none; border:none; cursor:pointer; padding:4px; color:var(--muted); font-size:17px; }
+
+  .badge{ font-size:11px; font-weight:700; padding:4px 8px; border-radius:7px; }
+  .badge-red{ background:var(--redLight); color:var(--red); }
+  .badge-green{ background:var(--greenLight); color:var(--green); }
+
+  .listItem{ display:flex; align-items:center; justify-content:between; }
+  .muted{ color:var(--muted); }
+  .tiny{ font-size:13px; }
+  .bold{ font-weight:700; }
+  .center{ text-align:center; }
+  .flexrow{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .backlink{ background:none; border:none; color:var(--primary); font-weight:700; font-size:15px;
+    display:flex; align-items:center; gap:5px; padding:4px 0 10px; cursor:pointer; font-family:inherit; }
+
+  .overlay{ position:fixed; inset:0; background:rgba(15,32,29,.45); z-index:50; display:flex;
+    align-items:flex-end; justify-content:center; }
+  .sheet{ background:var(--bg); width:100%; max-width:480px; border-radius:22px 22px 0 0; padding:20px;
+    max-height:85vh; overflow-y:auto; }
+  .sheet .sheetHead{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+  .sheet .sheetHead .t{ font-size:17px; font-weight:700; }
+  .sheet .sheetHead button{ background:none; border:none; font-size:22px; color:var(--muted); cursor:pointer; }
+
+  .memberRow, .loanRow{ width:100%; text-align:left; background:var(--paper); border-radius:16px; padding:14px;
+    display:flex; align-items:center; gap:12px; cursor:pointer; font-family:inherit; border:1px solid var(--border); }
+  .searchBar{ display:flex; align-items:center; gap:8px; background:var(--paper); border:1px solid var(--border);
+    border-radius:12px; padding:8px 12px; flex:1; }
+  .searchBar input{ border:none; padding:0; background:transparent; flex:1; font-size:15px; }
+  .toprow{ display:flex; gap:8px; align-items:center; }
+  .roundbtn{ width:44px; height:44px; border-radius:12px; background:var(--primary); color:#fff; border:none;
+    font-size:22px; cursor:pointer; flex-shrink:0; }
+  .income-tag { font-size:11px; padding:2px 6px; border-radius:4px; font-weight:bold; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <header>
+    <div class="row">
+      <div class="logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+      </div>
+      <div>
+        <div class="title">একতা যুব ফাউন্ডেশন</div>
+        <div class="subtitle">সদস্য ও হিসাব ব্যবস্থাপনা</div>
+      </div>
+      <button class="settingsBtn" data-action="open-backup">⚙️</button>
+    </div>
+  </header>
+  <main id="app"></main>
+  <nav>
+    <div class="grid">
+      <button data-action="nav" data-tab="dashboard"><span class="ic">📊</span><span class="lb">ড্যাশবোর্ড</span></button>
+      <button data-action="nav" data-tab="members"><span class="ic">👥</span><span class="lb">সদস্য</span></button>
+      <button data-action="nav" data-tab="loans"><span class="ic">🏦</span><span class="lb">ঋণ</span></button>
+      <button data-action="nav" data-tab="sms"><span class="ic">✉️</span><span class="lb">এসএমএস</span></button>
+    </div>
+  </nav>
+</div>
+<div id="modalRoot"></div>
+
+<script>
+"use strict";
+
+/* ---------------- Utilities ---------------- */
+const BN_DIGITS = ["০","১","২","৩","৪","৫","৬","৭","৮","৯"];
+const BN_MONTHS = ["জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"];
+function toBn(v){ return String(v).replace(/[0-9]/g, d => BN_DIGITS[d]); }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])[c]); }
+function bnMoney(n){ return "৳" + toBn(Math.round(n||0).toLocaleString("en-IN")); }
+function uid(){ return Math.random().toString(36).slice(2,10); }
+function todayStr(){ return new Date().toISOString().slice(0,10); }
+function currentMonthKey(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"); }
+function currentMonthLabel(){ const d=new Date(); return BN_MONTHS[d.getMonth()]+" "+toBn(d.getFullYear()); }
+function monthKeyLabel(key){ if(!key) return ""; const [y,m]=key.split("-"); return BN_MONTHS[parseInt(m,10)-1]+" "+toBn(y); }
+function monthKeyAdd(key, n){
+  const [y,m]=key.split("-").map(Number);
+  const d=new Date(y, m-1+n, 1);
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
+}
+function bnDate(iso){ if(!iso) return ""; const [y,m,d]=iso.split("-"); return toBn(d)+" "+BN_MONTHS[parseInt(m,10)-1]+", "+toBn(y); }
+function monthOptions(count){
+  const opts=[]; const d=new Date(); d.setDate(1);
+  for(let i=0;i<count;i++){
+    const key=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
+    opts.push({key, label: BN_MONTHS[d.getMonth()]+" "+toBn(d.getFullYear())});
+    d.setMonth(d.getMonth()-1);
+  }
+  return opts.reverse();
+}
+
+function resizeImage(file, callback) {
+  if(!file) return callback("");
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      const size = 150;
+      canvas.width = size;
+      canvas.height = size;
+      ctx.drawImage(img, 0, 0, size, size);
+      callback(canvas.toDataURL("image/jpeg", 0.7));
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderAvatarHtml(name, photo, extraClass="") {
+  if(photo) {
+    return `<img src="${esc(photo)}" class="avatar ${extraClass}" alt="${esc(name)}">`;
+  }
+  const char = name ? name.trim().charAt(0) : "👤";
+  return `<div class="avatar ${extraClass}">${esc(char)}</div>`;
+}
+
+/* ---------------- Storage ---------------- */
+const STORAGE_KEY = "samity_coop_data_v2";
+const SEED = { members: [], loans: [], transactions: [] };
+
+function loadData(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED));
+  return JSON.parse(JSON.stringify(SEED));
+}
+function saveData(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA)); }catch(e){ alert("সংরক্ষণ করা যায়নি।"); } }
+
+let DATA = loadData();
+let VIEW = { tab:"dashboard", memberId:null, loanId:null, txnType:null, memberSearch:"",
+  smsOnlyOverdue:true, smsOpenId:null,
+  smsTemplate:"প্রিয় {নাম}, আপনার {মাস} মাসের চাঁদা ৳{টাকা} এখনো বকেয়া আছে। শীঘ্রই পরিশোধ করার অনুরোধ করা হলো। - একতা যুব ফাউন্ডেশন" };
+
+/* ---------------- Derived helpers ---------------- */
+const LATE_FEE_DAY = 10;
+const LATE_FEE_AMOUNT = 20;
+function lateFeeForToday(){ return new Date().getDate() > LATE_FEE_DAY ? LATE_FEE_AMOUNT : 0; }
+function isOverdue(m){ return !m.duePayments.some(p=>p.month===currentMonthKey()); }
+function memberDueTotal(m){ return m.duePayments.reduce((s,p)=>s+p.amount,0); }
+function memberFineTotal(m){ return m.duePayments.reduce((s,p)=>s+(p.fine||0),0); }
+function memberTotalDeposit(m){ return memberDueTotal(m) + memberFineTotal(m) + m.deposits.reduce((s,d)=>s+d.amount,0); }
+function loanPaid(l){ return l.payments.reduce((s,p)=>s+p.amount,0); }
+function loanRemaining(l){ return l.principal - loanPaid(l); }
+function loanExtraIncome(l){ return Math.max(0, loanPaid(l) - l.principal); }
+
+function totals(){
+  const manualIncome = DATA.transactions.filter(t=>t.type==="income").reduce((s,t)=>s+t.amount,0);
+  const totalExpense = DATA.transactions.filter(t=>t.type==="expense").reduce((s,t)=>s+t.amount,0);
+  const totalLoanExtraIncome = DATA.loans.reduce((s,l)=>s+loanExtraIncome(l),0);
+  const totalFineIncome = DATA.members.reduce((s,m)=>s+memberFineTotal(m),0);
+  const baseIncome = manualIncome + totalFineIncome;
+  const totalIncome = baseIncome - totalExpense + totalLoanExtraIncome;
+  const totalDeposit = DATA.members.reduce((s,m)=>s+memberTotalDeposit(m),0);
+  const totalLoanOutstanding = DATA.loans.reduce((s,l)=>s+Math.max(0,loanRemaining(l)),0);
+  
+  const currentBalance = (totalIncome + totalDeposit) - (totalExpense + totalLoanOutstanding);
+
+  return { manualIncome, totalExpense, totalLoanExtraIncome, totalFineIncome, totalIncome, totalDeposit, totalLoanOutstanding, currentBalance };
+}
+
+/* ---------------- Render dispatcher ---------------- */
+function render(){
+  document.querySelectorAll("nav button").forEach(b=>{
+    b.classList.toggle("active", b.dataset.tab===VIEW.tab);
+  });
+  const app = document.getElementById("app");
+  if(VIEW.tab==="dashboard") app.innerHTML = VIEW.txnType ? renderTxnDetail() : renderDashboard();
+  else if(VIEW.tab==="members") app.innerHTML = VIEW.memberId ? renderMemberDetail() : renderMembersList();
+  else if(VIEW.tab==="loans") app.innerHTML = VIEW.loanId ? renderLoanDetail() : renderLoansList();
+  else if(VIEW.tab==="sms") app.innerHTML = renderSms();
+  attachDynamicListeners();
+}
+
+/* ---------------- Dashboard ---------------- */
+function renderDashboard(){
+  const t = totals();
+  const overdue = DATA.members.filter(isOverdue);
+  const balPos = t.currentBalance >= 0;
+  return `
+  <div class="stack">
+    <div class="card" style="background:${balPos?"var(--primary)":"var(--red)"}; border:none; display:flex; align-items:center; gap:12px;">
+      <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">💰</div>
+      <div>
+        <div class="tiny" style="color:rgba(255,255,255,.8); font-weight:600;">বর্তমান নগদ ব্যালেন্স</div>
+        <div style="color:#fff; font-size:24px; font-weight:700;">${bnMoney(t.currentBalance)}</div>
+      </div>
+    </div>
+    <div class="grid2">
+      <button class="statcard tone-green" data-action="open-txn" data-type="income">
+        <div class="ic">📈</div><div><div class="lbl">মোট আয়</div><div class="val">${bnMoney(t.totalIncome)}</div></div>
+      </button>
+      <button class="statcard tone-red" data-action="open-txn" data-type="expense">
+        <div class="ic">📉</div><div><div class="lbl">মোট ব্যয়</div><div class="val">${bnMoney(t.totalExpense)}</div></div>
+      </button>
+      <div class="statcard tone-primary" style="cursor:default;">
+        <div class="ic">💰</div><div><div class="lbl">মোট জমা</div><div class="val">${bnMoney(t.totalDeposit)}</div></div>
+      </div>
+      <div class="statcard tone-gold" style="cursor:default;">
+        <div class="ic">🏦</div><div><div class="lbl">বকেয়া ঋণ</div><div class="val">${bnMoney(t.totalLoanOutstanding)}</div></div>
+      </div>
+    </div>
+    <div class="tiny muted" style="padding:2px 4px;">${toBn(DATA.members.length)} জন সদস্য • ${toBn(DATA.loans.length)} টি ঋণ • বিস্তারিত দেখতে আয়/ব্যয় বক্সে চাপ দিন</div>
+    <div class="card">
+      <div class="flexrow" style="margin-bottom:8px;">
+        <div class="bold tiny">⚠️ চাঁদা বকেয়া — ${currentMonthLabel()}</div>
+      </div>
+      ${overdue.length===0
+        ? `<div class="tiny" style="color:var(--green);">✅ সবাই এই মাসের চাঁদা পরিশোধ করেছেন (অথবা সদস্য খালি)</div>`
+        : overdue.map(m=>`
+          <button class="flexrow" data-action="open-member" data-id="${m.id}"
+            style="width:100%;background:var(--redLight);border:none;border-radius:12px;padding:10px 12px;margin-bottom:6px;cursor:pointer;font-family:inherit;">
+            <div class="flexrow" style="gap:8px;">
+              ${renderAvatarHtml(m.name, m.photo)}
+              <span class="bold tiny" style="color:var(--red);">${esc(m.name)}</span>
+            </div>
+            <span class="tiny" style="color:var(--red);">বকেয়া ৳${toBn(m.monthlyDue)}</span>
+          </button>`).join("")}
+    </div>
+  </div>`;
+}
+
+/* ---------------- Income/Expense detail ---------------- */
+function renderTxnDetail(){
+  const type = VIEW.txnType;
+  const isIncome = type==="income";
+  const tone = isIncome ? "var(--green)" : "var(--red)";
+  const toneLight = isIncome ? "var(--greenLight)" : "var(--redLight)";
+  const t = totals();
+  const list = DATA.transactions.filter(tr=>tr.type===type).map(tr=>({...tr, origin:'manual'}));
+  
+  const loanRows = isIncome ? DATA.loans.map(l=>{
+    const extra = loanExtraIncome(l);
+    if(extra<=0) return null;
+    const sp=[...l.payments].sort((a,b)=>a.date<b.date?1:-1);
+    return { id: l.id, date: sp.length?sp[0].date:l.date, amount:extra, category:`ঋণ থেকে লাভ (অতিরিক্ত আদায়)`, note:`গ্রহীতা: ${l.memberName} (মূল ঋণ: ৳${toBn(l.principal)})`, origin:'loan' };
+  }).filter(Boolean) : [];
+
+  const fineRows = isIncome ? DATA.members.flatMap(m=>
+    m.duePayments.filter(p=>p.fine>0).map(p=>({ id: p.id, date:p.date, amount:p.fine, category:`১০ তারিখের পর বিলম্ব জরিমানা`, note:`সদস্য: ${m.name} (${monthKeyLabel(p.month)})`, origin:'fine' }))
+  ) : [];
+
+  const allIncomes = isIncome ? [...list, ...loanRows, ...fineRows].sort((a,b)=> a.date<b.date?1:-1) : list.sort((a,b)=> a.date<b.date?1:-1);
+
+  return `
+  <div class="stack">
+    <button class="backlink" data-action="back-txn">← ড্যাশবোর্ড</button>
+    <div class="card" style="background:${toneLight}; border-color:${tone};">
+      <div class="tiny bold" style="color:${tone};">${isIncome?"মোট আয়":"মোট ব্যয়"}</div>
+      <div style="color:${tone}; font-size:24px; font-weight:700;">${bnMoney(isIncome?t.totalIncome:t.totalExpense)}</div>
+      ${isIncome?`<div class="tiny muted" style="margin-top:6px;">
+        <div>সরাসরি সাধারণ আয়: ${bnMoney(t.manualIncome)}</div>
+        <div>মোট জরিমানা আদায়: ${bnMoney(t.totalFineIncome)}</div>
+        <div>ঋণ থেকে অতিরিক্ত লাভ: ${bnMoney(t.totalLoanExtraIncome)}</div>
+        <div>বিয়োগ — মোট ব্যয়: −${bnMoney(t.totalExpense)}</div>
+      </div>`:""}
+    </div>
+
+    <button class="btn btn-primary btn-block" data-action="open-add-txn" data-type="${type}">+ ${isIncome?"নতুন আয় যোগ করুন":"নতুন ব্যয় যোগ করুন"}</button>
+
+    <div>
+      <div class="bold tiny" style="margin:8px 4px 6px;">${isIncome?"আয়ের সমস্ত বিস্তারিত বিবরণ (স্বয়ংক্রিয় ও ম্যানুয়াল)":"ব্যয়ের তালিকা"}</div>
+      <div class="stack">
+        ${allIncomes.length===0?`<div class="tiny muted" style="padding:0 4px;">কোনো এন্ট্রি নেই</div>`:
+        allIncomes.map(tr=>`
+          <div class="card flexrow">
+            <div style="min-width:0;">
+              <div class="bold tiny">
+                ${esc(tr.category)}
+                ${tr.origin==='loan' ? `<span class="income-tag" style="background:var(--goldLight); color:var(--gold);">ঋণ লাভ</span>` : ''}
+                ${tr.origin==='fine' ? `<span class="income-tag" style="background:var(--redLight); color:var(--red);">জরিমানা</span>` : ''}
+              </div>
+              ${tr.note?`<div class="tiny muted">${esc(tr.note)}</div>`:""}
+              <div class="tiny muted">${bnDate(tr.date)}</div>
+            </div>
+            <div class="flexrow" style="gap:6px; flex-shrink:0;">
+              <div class="bold tiny" style="color:${tone};">+${bnMoney(tr.amount)}</div>
+              ${tr.origin==='manual' ? `
+                <button class="icon-btn" data-action="edit-txn" data-id="${tr.id}" title="সম্পাদনা">✏️</button>
+                <button class="icon-btn" data-action="delete-txn" data-id="${tr.id}" title="মুছে ফেলুন">🗑️</button>
+              ` : `<span class="tiny muted" style="font-size:11px;">(অটোমেটিক)</span>`}
+            </div>
+          </div>`).join("")}
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ---------------- Members ---------------- */
+function renderMembersListHtmlOnly(){
+  const q = VIEW.memberSearch.trim();
+  const filtered = DATA.members.filter(m=>m.name.includes(q)||m.phone.includes(q));
+  if(filtered.length===0){
+    return `<div class="tiny muted center" style="padding:24px 0;">কোনো সদস্য পাওয়া যায়নি। নতুন যোগ করতে '+' বাটন চাপুন।</div>`;
+  }
+  return filtered.map(m=>{
+    const od = isOverdue(m);
+    const total = memberTotalDeposit(m);
+    return `
+    <button class="memberRow" data-action="open-member" data-id="${m.id}" style="${od?`border-color:var(--red);`:""}">
+      ${renderAvatarHtml(m.name, m.photo)}
+      <div style="text-align:left; flex:1;">
+        <div class="bold tiny" style="font-size:15px;">${esc(m.name)} ${od?'<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--red);margin-left:4px;"></span>':""}</div>
+        <div class="tiny muted" style="margin-top:2px;">মোট জমা ${bnMoney(total)}</div>
+      </div>
+      <div class="flexrow" style="gap:8px;">
+        <span class="badge ${od?"badge-red":"badge-green"}">${od?"চাঁদা বকেয়া":"পরিশোধিত"}</span>
+        <span class="muted">›</span>
+      </div>
+    </button>`;
+  }).join("");
+}
+
+function renderMembersList(){
+  return `
+  <div class="stack">
+    <div class="toprow">
+      <div class="searchBar">
+        <span>🔍</span>
+        <input type="text" id="memberSearchInput" placeholder="নাম বা মোবাইল দিয়ে খুঁজুন" value="${esc(VIEW.memberSearch)}" />
+      </div>
+      <button class="roundbtn" data-action="open-add-member">+</button>
+    </div>
+    <div class="stack" id="membersListContainer">
+      ${renderMembersListHtmlOnly()}
+    </div>
+  </div>`;
+}
+
+function renderMemberDetail(){
+  const m = DATA.members.find(x=>x.id===VIEW.memberId);
+  if(!m){ VIEW.memberId=null; return renderMembersList(); }
+  const od = isOverdue(m);
+  const total = memberTotalDeposit(m);
+  const history = [
+    ...m.duePayments.map(p=>({...p, kind:"চাঁদা"})),
+    ...m.deposits.map(d=>({...d, kind:"জমা"})),
+  ].sort((a,b)=> a.date<b.date?1:-1);
+  const advanceMonths = m.duePayments.filter(p=>p.month>currentMonthKey()).length;
+
+  return `
+  <div class="stack">
+    <button class="backlink" data-action="back-member">← সদস্য তালিকা</button>
+    <div class="card">
+      <div class="flexrow" style="align-items:flex-start;">
+        <div class="flexrow" style="gap:12px;">
+          ${renderAvatarHtml(m.name, m.photo, "avatar-lg")}
+          <div>
+            <div class="bold" style="font-size:18px;">${esc(m.name)}</div>
+            ${m.fatherName?`<div class="tiny muted" style="margin-top:2px;">পিতা: ${esc(m.fatherName)}</div>`:""}
+            <div class="tiny muted" style="margin-top:3px;">📞 ${esc(m.phone)}</div>
+            ${m.shares?`<div class="tiny muted" style="margin-top:2px;">শেয়ার সংখ্যা: ${toBn(m.shares)}</div>`:""}
+            <div class="tiny muted" style="margin-top:2px;">যোগদান: ${bnDate(m.joinDate)}</div>
+          </div>
+        </div>
+        <button class="icon-btn" data-action="delete-member" data-id="${m.id}">🗑️</button>
+      </div>
+    </div>
+    <div class="card" style="background:var(--greenLight); border-color:var(--green); display:flex; align-items:center; gap:12px;">
+      <div style="width:46px;height:46px;border-radius:12px;background:var(--paper);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">💰</div>
+      <div>
+        <div class="tiny bold" style="color:var(--green);">এই সদস্যের মোট জমার পরিমাণ</div>
+        <div style="color:var(--green); font-size:24px; font-weight:700;">${bnMoney(total)}</div>
+      </div>
+    </div>
+    <div class="card" style="background:${od?"var(--redLight)":"var(--greenLight)"}; border-color:${od?"var(--red)":"var(--green)"};">
+      <div class="flexrow">
+        <div>
+          <div class="bold tiny" style="color:${od?"var(--red)":"var(--green)"};">${currentMonthLabel()}-এর চাঁদা ${od?"বকেয়া":"পরিশোধিত"}</div>
+          <div class="tiny muted" style="margin-top:2px;">মাসিক চাঁদা ৳${toBn(m.monthlyDue)}</div>
+        </div>
+        ${od?`<button class="btn btn-red btn-sm" data-action="pay-due" data-id="${m.id}">পরিশোধ করুন</button>`:""}
+      </div>
+      ${od && lateFeeForToday()>0 ? `<div class="tiny" style="color:var(--red); margin-top:8px;">আজ ${toBn(LATE_FEE_DAY)} তারিখ পার হয়ে গেছে — জমা দিলে অতিরিক্ত ৳${toBn(LATE_FEE_AMOUNT)} জরিমানা হিসেবে মোট আয়ে যোগ হবে।</div>`:""}
+      ${advanceMonths>0?`<div class="tiny" style="color:var(--green); margin-top:8px; font-weight:600;">✓ এই সদস্য বর্তমান মাস ছাড়াও আরও ${toBn(advanceMonths)} মাস অগ্রিম চাঁদা দিয়ে রেখেছেন</div>`:""}
+    </div>
+    <div class="card">
+      <div class="bold tiny" style="margin-bottom:8px;">অগ্রিম চাঁদা জমা দিন</div>
+      <div class="flexrow" style="gap:8px;">
+        <input type="number" id="advanceMonthsInput" placeholder="কয় মাস অগ্রিম" min="1" />
+        <button class="btn btn-gold btn-sm" data-action="pay-advance" data-id="${m.id}" style="flex-shrink:0;">জমা দিন</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="bold tiny" style="margin-bottom:8px;">অতিরিক্ত জমা যোগ করুন</div>
+      <div class="flexrow" style="gap:8px;">
+        <input type="number" id="depositAmt" placeholder="টাকার পরিমাণ" />
+        <button class="btn btn-primary btn-sm" data-action="add-deposit" data-id="${m.id}" style="flex-shrink:0;">যোগ করুন</button>
+      </div>
+      <div style="margin-top:8px;"><input type="text" id="depositNote" placeholder="নোট (ঐচ্ছিক)" /></div>
+    </div>
+    <div>
+      <div class="bold tiny" style="margin:4px 4px 6px;">জমার বিবরণ</div>
+      <div class="stack">
+        ${history.length===0?`<div class="tiny muted" style="padding:0 4px;">কোনো লেনদেন নেই</div>`:
+        history.map(h=>`
+          <div class="card flexrow">
+            <div>
+              <div class="bold tiny">${h.kind}${h.month?` (${monthKeyLabel(h.month)})`:""}${h.note?` — ${esc(h.note)}`:""}</div>
+              <div class="tiny muted">${bnDate(h.date)}</div>
+              ${h.fine>0?`<div class="tiny" style="color:var(--red); font-weight:600;">+ ৳${toBn(h.fine)} জরিমানা (১০ তারিখ পার হওয়ার দরুন আয়ে যুক্ত)</div>`:""}
+            </div>
+            <div class="bold tiny" style="color:var(--green);">+${bnMoney(h.amount + (h.fine||0))}</div>
+          </div>`).join("")}
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ---------------- Loans ---------------- */
+function renderLoansList(){
+  return `
+  <div class="stack">
+    <div class="flexrow" style="padding:0 2px;">
+      <div class="bold tiny" style="font-size:15px;">ঋণ গ্রহীতার তালিকা</div>
+      <button class="roundbtn" style="width:40px;height:40px;font-size:18px;" data-action="open-add-loan">+</button>
+    </div>
+    <div class="stack">
+      ${DATA.loans.length===0?`<div class="tiny muted center" style="padding:24px 0;">কোনো ঋণ যোগ করা হয়নি। নতুন ঋণ দিতে '+' বাটন চাপুন।</div>`:
+      DATA.loans.map(l=>{
+        const rem = loanRemaining(l);
+        const paid = rem<=0;
+        const extra = loanExtraIncome(l);
+        return `
+        <button class="loanRow" data-action="open-loan" data-id="${l.id}">
+          ${renderAvatarHtml(l.memberName, l.photo)}
+          <div style="text-align:left; flex:1;">
+            <div class="bold tiny" style="font-size:15px;">${esc(l.memberName)}</div>
+            <div class="tiny muted" style="margin-top:2px;">মূল ঋণ ${bnMoney(l.principal)} • ${bnDate(l.date)}</div>
+            ${extra>0?`<div class="tiny bold" style="color:var(--green); margin-top:2px;">লাভ অর্জিত: ${bnMoney(extra)}</div>`:''}
+          </div>
+          <div style="text-align:right;">
+            <div class="bold tiny" style="color:${paid?"var(--green)":"var(--gold)"};">${paid?"পরিশোধিত":bnMoney(rem)}</div>
+            ${!paid?`<div class="tiny muted">বকেয়া</div>`:""}
+          </div>
+        </button>`;
+      }).join("")}
+    </div>
+  </div>`;
+}
+
+function renderLoanDetail(){
+  const l = DATA.loans.find(x=>x.id===VIEW.loanId);
+  if(!l){ VIEW.loanId=null; return renderLoansList(); }
+  const rem = loanRemaining(l);
+  const paid = loanPaid(l);
+  const extra = loanExtraIncome(l);
+  const months = monthOptions(8);
+  const paidMonths = new Set(l.payments.filter(p=>p.month).map(p=>p.month));
+  const sortedPayments = [...l.payments].sort((a,b)=> a.date<b.date?1:-1);
+
+  return `
+  <div class="stack">
+    <button class="backlink" data-action="back-loan">← ঋণের তালিকা</button>
+    <div class="card">
+      <div class="flexrow" style="align-items:flex-start;">
+        <div class="flexrow" style="gap:12px;">
+          ${renderAvatarHtml(l.memberName, l.photo, "avatar-lg")}
+          <div>
+            <div class="bold" style="font-size:18px;">${esc(l.memberName)}</div>
+            <div class="tiny muted" style="margin-top:3px;">ঋণ প্রদানের তারিখ: ${bnDate(l.date)}</div>
+            ${l.note?`<div class="tiny muted" style="margin-top:2px;">নোট: ${esc(l.note)}</div>`:""}
+            ${l.monthlyInstallment>0?`<div class="tiny bold" style="color:var(--gold); margin-top:2px;">মাসিক কিস্তির পরিমাণ: ${bnMoney(l.monthlyInstallment)}</div>`:""}
+            ${l.installmentCount>0?`<div class="tiny bold" style="color:var(--gold); margin-top:2px;">কিস্তির সংখ্যা: ${toBn(l.installmentCount)} টি</div>`:""}
+          </div>
+        </div>
+        <button class="icon-btn" data-action="delete-loan" data-id="${l.id}">🗑️</button>
+      </div>
+      <div class="grid3" style="margin-top:12px;">
+        <div style="background:var(--primaryLight); border-radius:12px; padding:10px; text-align:center;">
+          <div class="tiny muted">মূল ঋণ</div><div class="tiny bold" style="color:var(--primary); margin-top:2px;">${bnMoney(l.principal)}</div>
+        </div>
+        <div style="background:var(--greenLight); border-radius:12px; padding:10px; text-align:center;">
+          <div class="tiny muted">মোট আদায়</div><div class="tiny bold" style="color:var(--green); margin-top:2px;">${bnMoney(paid)}</div>
+        </div>
+        <div style="background:${rem>0?"var(--redLight)":"var(--greenLight)"}; border-radius:12px; padding:10px; text-align:center;">
+          <div class="tiny muted">বকেয়া</div><div class="tiny bold" style="color:${rem>0?"var(--red)":"var(--green)"}; margin-top:2px;">${bnMoney(Math.max(rem,0))}</div>
+        </div>
+      </div>
+      ${extra>0?`<div class="tiny bold center" style="margin-top:10px; padding:8px; background:var(--goldLight); color:var(--gold); border-radius:8px;">💡 মূল ঋণের চেয়ে ${bnMoney(extra)} অতিরিক্ত লাভ অর্জিত হয়েছে যা মোট আয়ে যুক্ত আছে।</div>`:""}
+    </div>
+    
+    <div class="card">
+      <div class="bold tiny" style="margin-bottom:8px;">মাসিক কিস্তি জমা দিন</div>
+      <div class="grid2">
+        <select id="instMonth">
+          ${months.map(mo=>`<option value="${mo.key}" ${mo.key===currentMonthKey()?"selected":""}>${mo.label}${paidMonths.has(mo.key)?" ✓":""}</option>`).join("")}
+        </select>
+        <input type="number" id="instAmt" placeholder="টাকার পরিমাণ" />
+      </div>
+      <button class="btn btn-gold btn-block" style="margin-top:10px;" data-action="pay-installment" data-id="${l.id}">এই মাসের কিস্তি জমা দিন</button>
+      <div style="border-top:1px dashed var(--border); margin-top:12px; padding-top:12px;">
+        <div class="tiny muted" style="margin-bottom:6px;">অথবা মাস উল্লেখ ছাড়া বাড়তি পরিশোধ/কিস্তি জমা</div>
+        <div class="flexrow" style="gap:8px;">
+          <input type="number" id="extraAmt" placeholder="টাকার পরিমাণ" />
+          <button class="btn btn-primary btn-sm" data-action="pay-extra" data-id="${l.id}" style="flex-shrink:0;">যোগ করুন</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="bold tiny" style="margin:4px 4px 6px;">কিস্তির বিবরণ</div>
+      <div class="stack">
+        ${sortedPayments.length===0?`<div class="tiny muted" style="padding:0 4px;">এখনো কোনো কিস্তি পরিশোধ হয়নি</div>`:
+        sortedPayments.map(p=>`
+          <div class="card flexrow">
+            <div>
+              ${p.month?`<div class="bold tiny">${monthKeyLabel(p.month)}-এর কিস্তি</div>`:""}
+              <div class="tiny muted">${bnDate(p.date)}</div>
+            </div>
+            <div class="bold tiny" style="color:var(--green);">+${bnMoney(p.amount)}</div>
+          </div>`).join("")}
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ---------------- SMS ---------------- */
+function buildSmsMsg(m){
+  return VIEW.smsTemplate
+    .replaceAll("{নাম}", m.name)
+    .replaceAll("{মাস}", currentMonthLabel())
+    .replaceAll("{টাকা}", toBn(m.monthlyDue));
+}
+function smsHref(phone, msg){
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const sep = isIOS ? "&" : "?";
+  return `sms:${phone}${sep}body=${encodeURIComponent(msg)}`;
+}
+
+function renderSms(){
+  const list = VIEW.smsOnlyOverdue ? DATA.members.filter(isOverdue) : DATA.members;
+  return `
+  <div class="stack">
+    <div class="card">
+      <div class="bold tiny" style="margin-bottom:8px;">মেসেজ টেমপ্লেট</div>
+      <textarea id="smsTemplateInput" rows="4">${esc(VIEW.smsTemplate)}</textarea>
+      <div class="tiny muted" style="margin-top:6px;">ব্যবহারযোগ্য চলক: {নাম} {মাস} {টাকা}</div>
+    </div>
+    <div class="flexrow" style="padding:0 2px;">
+      <button class="btn btn-sm ${VIEW.smsOnlyOverdue?"btn-red":"btn-outline"}" data-action="toggle-sms-overdue">শুধু বকেয়া সদস্য</button>
+    </div>
+    <div class="stack">
+      ${list.length===0?`<div class="tiny muted center" style="padding:24px 0;">কোনো সদস্য নেই</div>`:
+      list.map(m=>{
+        const open = VIEW.smsOpenId===m.id;
+        const msg = buildSmsMsg(m);
+        return `
+        <div class="card">
+          <button class="flexrow" data-action="toggle-sms-open" data-id="${m.id}" style="width:100%; background:none; border:none; cursor:pointer; font-family:inherit; padding:0;">
+            <div class="flexrow" style="gap:10px;">
+              ${renderAvatarHtml(m.name, m.photo)}
+              <div style="text-align:left;">
+                <div class="bold tiny">${esc(m.name)}</div>
+                <div class="tiny muted">${esc(m.phone)}</div>
+              </div>
+            </div>
+            <span class="muted" style="transform:${open?"rotate(90deg)":"none"}; display:inline-block;">›</span>
+          </button>
+          ${open?`
+            <div style="border-top:1px dashed var(--border); margin-top:10px; padding-top:10px;">
+              <textarea readonly rows="4" style="background:var(--bg);" onclick="this.select()">${esc(msg)}</textarea>
+              <div class="grid2" style="margin-top:8px;">
+                <button class="btn btn-outline btn-sm" data-action="copy-sms" data-id="${m.id}">📋 কপি করুন</button>
+                <a class="btn btn-primary btn-sm" style="text-decoration:none; display:flex; align-items:center; justify-content:center;"
+                   href="${smsHref(m.phone, msg)}">📤 পাঠান</a>
+              </div>
+            </div>`:""}
+        </div>`;
+      }).join("")}
+    </div>
+  </div>`;
+}
+
+/* ---------------- Modals ---------------- */
+function openModal(html){
+  document.getElementById("modalRoot").innerHTML = `
+    <div class="overlay" onclick="if(event.target===this){closeModal();}">
+      <div class="sheet">${html}</div>
+    </div>`;
+}
+function closeModal(){ document.getElementById("modalRoot").innerHTML = ""; }
+
+function modalAddMember(){
+  openModal(`
+    <div class="sheetHead"><div class="t">নতুন সদস্য যোগ করুন</div><button data-action="close-modal">✕</button></div>
+    <div class="field"><label>ছবি আপলোড করুন (ঐচ্ছিক)</label><input type="file" id="f_photo" accept="image/*" /></div>
+    <div class="field"><label>নাম</label><input type="text" id="f_name" /></div>
+    <div class="field"><label>পিতার নাম</label><input type="text" id="f_father" /></div>
+    <div class="field"><label>মোবাইল নম্বর</label><input type="tel" id="f_phone" /></div>
+    <div class="field"><label>শেয়ার সংখ্যা</label><input type="number" id="f_shares" value="1" /></div>
+    <div class="field"><label>মাসিক চাঁদার পরিমাণ</label><input type="number" id="f_due" placeholder="০" /></div>
+    <button class="btn btn-primary btn-block" data-action="save-member">সদস্য যোগ করুন</button>
+  `);
+}
+
+function modalAddLoan(){
+  const opts = DATA.members.map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join("");
+  openModal(`
+    <div class="sheetHead"><div class="t">নতুন ঋণ যোগ করুন</div><button data-action="close-modal">✕</button></div>
+    <div class="field"><label>সদস্য থেকে বেছে নিন (ঐচ্ছিক)</label><select id="f_memberId"><option value="">— নির্বাচন করুন —</option>${opts}</select></div>
+    <div class="field"><label>অথবা সরাসরি নাম লিখুন (সদস্য না হলে)</label><input type="text" id="f_borrowerName" placeholder="ঋণগ্রহীতার নাম" /></div>
+    <div class="field"><label>ছবি আপলোড করুন (সদস্য না হলে)</label><input type="file" id="f_loanPhoto" accept="image/*" /></div>
+    <div class="field"><label>ঋণের পরিমাণ</label><input type="number" id="f_principal" placeholder="০" /></div>
+    <div class="field"><label>মাসিক কিস্তির পরিমাণ (ঐচ্ছিক)</label><input type="number" id="f_installment" placeholder="০" /></div>
+    <div class="field"><label>কিস্তির সংখ্যা (ঐচ্ছিক)</label><input type="number" id="f_installmentCount" placeholder="যেমন: ১২" /></div>
+    <div class="field"><label>নোট (ঐচ্ছিক)</label><input type="text" id="f_loanNote" /></div>
+    <button class="btn btn-primary btn-block" data-action="save-loan">ঋণ যোগ করুন</button>
+  `);
+}
+
+function modalAddTxn(type, editId){
+  const isIncome = type==="income";
+  const existing = editId ? DATA.transactions.find(t=>t.id===editId) : null;
+  openModal(`
+    <div class="sheetHead"><div class="t">${existing?(isIncome?"আয় সম্পাদনা করুন":"ব্যয় সম্পাদনা করুন"):(isIncome?"নতুন আয় যোগ করুন":"নতুন ব্যয় যোগ করুন")}</div><button data-action="close-modal">✕</button></div>
+    <div class="field"><label>খাত (যেমন: অনুদান, পরিচালনা ব্যয়)</label><input type="text" id="f_category" value="${existing?esc(existing.category):""}" /></div>
+    <div class="field"><label>পরিমাণ</label><input type="number" id="f_amount" value="${existing?existing.amount:""}" placeholder="০" /></div>
+    <div class="field"><label>নোট (ঐচ্ছিক)</label><input type="text" id="f_txnNote" value="${existing?esc(existing.note||""):""}" /></div>
+    <button class="btn ${isIncome?"btn-primary":"btn-red"} btn-block" data-action="save-txn" data-type="${type}" data-edit-id="${editId||""}">${existing?"সংরক্ষণ করুন":"যোগ করুন"}</button>
+  `);
+}
+
+function modalBackup(){
+  const exportText = JSON.stringify(DATA, null, 2);
+  openModal(`
+    <div class="sheetHead"><div class="t">ব্যাকআপ ও ডিভাইস পরিবর্তন</div><button data-action="close-modal">✕</button></div>
+    <div class="tiny muted" style="margin-bottom:12px;">নিচের বাক্স থেকে ডেটা কপি করে অন্য মোবাইলে "আমদানি" অংশে পেস্ট করলে সব রেকর্ড সেখানে যাবে।</div>
+    <div class="bold tiny" style="margin-bottom:6px;">১. ডেটা কপি করুন (এক্সপোর্ট)</div>
+    <textarea id="exportBox" rows="6" readonly onclick="this.select()" style="background:var(--bg); font-size:12px;">${esc(exportText)}</textarea>
+    <button class="btn btn-primary btn-block" style="margin-top:8px; margin-bottom:18px;" data-action="copy-backup">সব ডেটা কপি করুন</button>
+    <div class="bold tiny" style="margin-bottom:6px;">২. এখানে পেস্ট করে আমদানি করুন</div>
+    <textarea id="importBox" rows="5" placeholder="এখানে কপি করা ডেটা পেস্ট করুন" style="font-size:12px;"></textarea>
+    <div id="importError" class="tiny" style="color:var(--red); margin-top:4px;"></div>
+    <button class="btn btn-gold btn-block" style="margin-top:8px;" data-action="do-import">আমদানি করুন (বর্তমান ডেটা প্রতিস্থাপিত হবে)</button>
+    <div style="border-top:1px dashed var(--border); margin-top:18px; padding-top:14px;">
+      <div class="bold tiny" style="margin-bottom:6px; color:var(--red);">⚠️ সব ডেটা মুছে নতুন শুরু করুন</div>
+      <button class="btn btn-outline btn-block" data-action="reset-data" style="color:var(--red); border-color:var(--red);">সব রেকর্ড মুছে ফেলুন</button>
+    </div>
+  `);
+}
+
+/* ---------------- Copy helper ---------------- */
+function copyText(text){
+  let ok=false;
+  try{
+    const ta=document.createElement("textarea");
+    ta.value=text; ta.style.position="fixed"; ta.style.opacity="0";
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    ok=document.execCommand("copy");
+    document.body.removeChild(ta);
+  }catch(e){ ok=false; }
+  if(!ok && navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).catch(()=>{});
+    return true;
+  }
+  return ok;
+}
+
+/* ---------------- Actions & Event Listeners ---------------- */
+function attachDynamicListeners(){
+  const searchInput = document.getElementById("memberSearchInput");
+  if(searchInput){
+    searchInput.addEventListener("input", e=>{ 
+      VIEW.memberSearch = e.target.value; 
+      const container = document.getElementById("membersListContainer");
+      if(container) {
+        container.innerHTML = renderMembersListHtmlOnly();
+      }
+    });
+  }
+  const tplInput = document.getElementById("smsTemplateInput");
+  if(tplInput){
+    tplInput.addEventListener("input", e=>{ VIEW.smsTemplate = e.target.value; });
+  }
+}
+
+document.addEventListener("click", function(e){
+  const el = e.target.closest("[data-action]");
+  if(!el) return;
+  const action = el.dataset.action;
+  const id = el.dataset.id;
+
+  if(action==="nav"){ VIEW.tab=el.dataset.tab; VIEW.memberId=null; VIEW.loanId=null; VIEW.txnType=null; render(); return; }
+  if(action==="open-member"){ VIEW.memberId=id; render(); return; }
+  if(action==="back-member"){ VIEW.memberId=null; render(); return; }
+  if(action==="open-loan"){ VIEW.loanId=id; render(); return; }
+  if(action==="back-loan"){ VIEW.loanId=null; render(); return; }
+  if(action==="open-txn"){ VIEW.txnType=el.dataset.type; render(); return; }
+  if(action==="back-txn"){ VIEW.txnType=null; render(); return; }
+
+  if(action==="open-add-member"){ modalAddMember(); return; }
+  if(action==="open-add-loan"){ modalAddLoan(); return; }
+  if(action==="open-add-txn"){ modalAddTxn(el.dataset.type); return; }
+  if(action==="open-backup"){ modalBackup(); return; }
+  if(action==="close-modal"){ closeModal(); return; }
+
+  if(action==="save-member"){
+    const name=document.getElementById("f_name").value.trim();
+    const father=document.getElementById("f_father").value.trim();
+    const phone=document.getElementById("f_phone").value.trim();
+    const shares=parseInt(document.getElementById("f_shares").value)||1;
+    const due=parseFloat(document.getElementById("f_due").value)||0;
+    const fileInput=document.getElementById("f_photo");
+    if(!name||!phone) return;
+
+    resizeImage(fileInput.files[0], function(photoBase64){
+      DATA.members.push({ id:uid(), photo:photoBase64, name, fatherName:father, phone, shares, joinDate:todayStr(), monthlyDue:due, duePayments:[], deposits:[] });
+      saveData(); closeModal(); render();
+    });
+    return;
+  }
+
+  if(action==="save-loan"){
+    const memberId=document.getElementById("f_memberId").value;
+    const borrowerName=document.getElementById("f_borrowerName").value.trim();
+    const principal=parseFloat(document.getElementById("f_principal").value);
+    const installment=parseFloat(document.getElementById("f_installment").value)||0;
+    const installmentCount=parseInt(document.getElementById("f_installmentCount").value)||0;
+    const note=document.getElementById("f_loanNote").value.trim();
+    const fileInput=document.getElementById("f_loanPhoto");
+    const member=memberId ? DATA.members.find(m=>m.id===memberId) : null;
+    const memberName = borrowerName || (member?member.name:"");
+    if(!memberName||!principal||principal<=0) return;
+
+    const finalizeLoan = function(photoBase64){
+      const photo = member ? member.photo : photoBase64;
+      DATA.loans.push({ id:uid(), photo, memberId:memberId||null, memberName, principal, date:todayStr(), note, monthlyInstallment:installment, installmentCount, payments:[] });
+      saveData(); closeModal(); render();
+    };
+
+    if(!member && fileInput && fileInput.files[0]){
+      resizeImage(fileInput.files[0], finalizeLoan);
+    } else {
+      finalizeLoan("");
+    }
+    return;
+  }
+
+  if(action==="save-txn"){
+    const type=el.dataset.type;
+    const editId=el.dataset.editId;
+    const category=document.getElementById("f_category").value.trim();
+    const amount=parseFloat(document.getElementById("f_amount").value);
+    const note=document.getElementById("f_txnNote").value.trim();
+    if(!category||!amount||amount<=0) return;
+    if(editId){
+      const t=DATA.transactions.find(x=>x.id===editId);
+      if(t){ t.category=category; t.amount=amount; t.note=note; }
+    }else{
+      DATA.transactions.push({ id:uid(), type, category, amount, date:todayStr(), note });
+    }
+    saveData(); closeModal(); render(); return;
+  }
+  if(action==="edit-txn"){
+    const t=DATA.transactions.find(x=>x.id===id);
+    if(t) modalAddTxn(t.type, t.id);
+    return;
+  }
+  if(action==="delete-txn"){
+    if(!confirm("এই আয়ে/ব্যয়ের এন্ট্রিটি মুছে ফেলতে চান?")) return;
+    DATA.transactions = DATA.transactions.filter(t=>t.id!==id);
+    saveData(); render(); return;
+  }
+  if(action==="delete-member"){
+    if(!confirm("এই সদস্যকে মুছে ফেলতে চান?")) return;
+    DATA.members = DATA.members.filter(m=>m.id!==id);
+    VIEW.memberId=null; saveData(); render(); return;
+  }
+  if(action==="delete-loan"){
+    if(!confirm("এই ঋণটি মুছে ফেলতে চান?")) return;
+    DATA.loans = DATA.loans.filter(l=>l.id!==id);
+    VIEW.loanId=null; saveData(); render(); return;
+  }
+  if(action==="pay-due"){
+    const m=DATA.members.find(x=>x.id===id);
+    if(!m) return;
+    const fine = lateFeeForToday();
+    m.duePayments = m.duePayments.filter(p=>p.month!==currentMonthKey());
+    m.duePayments.push({ id:uid(), month:currentMonthKey(), date:todayStr(), amount:m.monthlyDue, fine });
+    saveData(); render(); return;
+  }
+  if(action==="pay-advance"){
+    const n = parseInt(document.getElementById("advanceMonthsInput").value);
+    if(!n || n<=0) return;
+    const m=DATA.members.find(x=>x.id===id);
+    if(!m) return;
+    const paidMonths = new Set(m.duePayments.map(p=>p.month));
+    let cursor = currentMonthKey();
+    let added = 0;
+    while(added < n){
+      if(!paidMonths.has(cursor)){
+        const fine = cursor===currentMonthKey() ? lateFeeForToday() : 0;
+        m.duePayments.push({ id:uid(), month:cursor, date:todayStr(), amount:m.monthlyDue, fine });
+        paidMonths.add(cursor);
+        added++;
+      }
+      cursor = monthKeyAdd(cursor, 1);
+    }
+    saveData(); render(); return;
+  }
+  if(action==="add-deposit"){
+    const amt=parseFloat(document.getElementById("depositAmt").value);
+    const note=document.getElementById("depositNote").value.trim();
+    if(!amt||amt<=0) return;
+    const m=DATA.members.find(x=>x.id===id);
+    m.deposits.push({ id:uid(), date:todayStr(), amount:amt, note });
+    saveData(); render(); return;
+  }
+  if(action==="pay-installment"){
+    const month=document.getElementById("instMonth").value;
+    const amt=parseFloat(document.getElementById("instAmt").value);
+    if(!amt||amt<=0) return;
+    const l=DATA.loans.find(x=>x.id===id);
+    l.payments.push({ id:uid(), date:todayStr(), amount:amt, month });
+    saveData(); render(); return;
+  }
+  if(action==="pay-extra"){
+    const amt=parseFloat(document.getElementById("extraAmt").value);
+    if(!amt||amt<=0) return;
+    const l=DATA.loans.find(x=>x.id===id);
+    l.payments.push({ id:uid(), date:todayStr(), amount:amt, month:null });
+    saveData(); render(); return;
+  }
+  if(action==="toggle-sms-overdue"){ VIEW.smsOnlyOverdue=!VIEW.smsOnlyOverdue; render(); return; }
+  if(action==="toggle-sms-open"){ VIEW.smsOpenId = VIEW.smsOpenId===id ? null : id; render(); return; }
+  if(action==="copy-sms"){
+    const m=DATA.members.find(x=>x.id===id);
+    const ok=copyText(buildSmsMsg(m));
+    el.textContent = ok ? "কপি হয়েছে ✓" : "কপি করা যায়নি";
+    setTimeout(()=>{ el.textContent="📋 কপি করুন"; }, 1500);
+    return;
+  }
+  if(action==="copy-backup"){
+    const text=document.getElementById("exportBox").value;
+    const ok=copyText(text);
+    el.textContent = ok ? "কপি হয়েছে ✓" : "কপি করা যায়নি";
+    setTimeout(()=>{ el.textContent="সব ডেটা কপি করুন"; }, 1800);
+    return;
+  }
+  if(action==="do-import"){
+    const errEl=document.getElementById("importError");
+    try{
+      const parsed=JSON.parse(document.getElementById("importBox").value);
+      if(!parsed.members||!parsed.loans||!parsed.transactions){
+        errEl.textContent="ডেটার ফরম্যাট ঠিক নেই।"; return;
+      }
+      if(!confirm("এই মুহূর্তের সব ডেটা মুছে নতুন ডেটা বসবে। নিশ্চিত?")) return;
+      DATA = parsed; saveData(); closeModal(); render();
+    }catch(err){ errEl.textContent="লেখাটি সঠিক নয়, আবার কপি করে চেষ্টা করুন।"; }
+    return;
+  }
+  if(action==="reset-data"){
+    if(!confirm("সত্যিই সব রেকর্ড মুছে ফেলতে চান? এটি ফেরানো যাবে না।")) return;
+    DATA = { members:[], loans:[], transactions:[] };
+    saveData(); closeModal(); render(); return;
+  }
+});
+
+render();
+</script>
+</body>
+</html>
